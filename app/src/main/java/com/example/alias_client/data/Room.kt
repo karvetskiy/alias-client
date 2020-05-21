@@ -1,10 +1,10 @@
-package dev.karvetskiy
+package com.example.alias_client.data
 
 import java.util.*
 import kotlin.collections.ArrayList
 
 class Room {
-    lateinit var roomid: Integer
+    var roomid = 0
     val users = ArrayList<User>()
     var activeUserID = 0
 
@@ -12,8 +12,8 @@ class Room {
         createRoomID()
     }
 
-    fun createRoomID(){
-        roomid =(1000 + Random().nextInt(9000)) as Integer
+    private fun createRoomID(){
+        roomid =(1000 + Random().nextInt(9000))
     }
 
 

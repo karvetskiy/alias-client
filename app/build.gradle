@@ -25,7 +25,7 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "BASEURL", '"https://https://alias-online.herokuapp.com/"')
+            buildConfigField("String", "BASEURL", '"https://alias-server-2.herokuapp.com/"')
         }
     }
 
