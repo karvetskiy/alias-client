@@ -11,22 +11,25 @@ interface Requests {
     @GET("createRoom")
     fun createRoom():Observable<Room>
 
-    @GET("destroyRoom")
-    fun destroyRoom(@Query("roomid") roomId: Int):Observable<ResponseBody>
-
     @GET("addUser")
     fun addUser(@Query("roomid")roomid: Int):Observable<Int>
 
     @GET("deleteUser")
-    fun deleteUser(@Query("roomid")roomId: Int, @Query("userid")userid: Int):Observable<ResponseBody>
+    fun deleteUser(@Query("roomid")roomid: Int, @Query("userid")userid: Int):Observable<ResponseBody>
 
     @GET("activeUser")
-    fun activeUser(@Query("roomid")roomId: Int, @Query("userid")userid: Int):Observable<Room>
+    fun activeUser(@Query("roomid")roomid: Int, @Query("userid")userid: Int):Observable<Room>
 
     @GET("getRoomState")
     fun getRoomState(@Query("roomid") roomid: Int):Observable<Room>
 
     @GET("getWord")
     fun getWord():Observable<String>
+
+    @GET("nextUser")
+    fun nextUser(@Query("roomid")roomid: Int, @Query("userid")userid: Int):Observable<ResponseBody>
+
+    @GET("updateOnServer")
+    fun update(@Query("roomid")roomid: Int, @Query("userid")userid: Int, @Query("score")score: Int):Observable<ResponseBody>
 
 }

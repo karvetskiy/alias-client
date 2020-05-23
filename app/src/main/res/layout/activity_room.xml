@@ -10,7 +10,6 @@
         android:id="@+id/tvRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Room"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,8 +49,8 @@
 
     <TextView
         android:id="@+id/tvTimer"
-        android:layout_width="7dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:textColor="#3F51B5"
         android:textSize="20sp"
@@ -68,6 +67,7 @@
         android:layout_marginTop="32dp"
         android:text="NO"
         android:textSize="40sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWord" />
 
@@ -80,19 +80,9 @@
         android:layout_marginEnd="64dp"
         android:text="YES"
         android:textSize="40sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvWord" />
-
-    <Button
-        android:id="@+id/btNext"
-        style="@android:style/Widget.Material.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="NEXT WORD"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btNo" />
 
     <Button
         android:id="@+id/btStart"
@@ -104,5 +94,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btNext" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTimer" />
 </androidx.constraintlayout.widget.ConstraintLayout>

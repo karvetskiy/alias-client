@@ -15,12 +15,6 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
-    override fun destroyRoom(roomid: Int): Observable<ResponseBody> =
-        getBnc()
-            .destroyRoom(roomid)
-            .subscribeOn(Schedulers.newThread())
-            .observeOn(AndroidSchedulers.mainThread())
-
 
     override fun addUser(roomid: Int): Observable<Int> =
         getBnc()
@@ -53,6 +47,18 @@ class RequestsImpl(): BaseRequest(), RequestsI {
     override fun getWord(): Observable<String> =
         getBnc()
             .getWord()
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+
+    override fun nextUser(roomid: Int, userid: Int): Observable<ResponseBody> =
+        getBnc()
+            .nextUser(roomid, userid)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+
+    override fun update(roomid: Int, userid: Int, score: Int): Observable<ResponseBody> =
+        getBnc()
+            .update(roomid, userid, score)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 

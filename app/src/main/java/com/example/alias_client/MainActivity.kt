@@ -10,17 +10,20 @@ import butterknife.OnClick
 import com.example.alias_client.net.RequestsI
 import com.example.alias_client.net.RequestsImpl
 import com.example.alias_client.data.Room
+import com.example.alias_client.data.User
+import com.example.alias_client.net.Converter
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
-    private val requests: RequestsI = RequestsImpl()
-
-    private val handler = Handler()
+    private val c = Converter()
 
     companion object {
         var room = Room()
+        var user = User()
+        var word = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,31 +36,32 @@ class MainActivity : AppCompatActivity() {
     @OnClick(R.id.btConnect)
     fun clickBtConnect(){
         if (etRoomNumber.text.toString() != ""){
-            try {
-                room = requests.addUser(etRoomNumber.text.toString().toInt()) as Room
-            } catch (e: Exception) {
-                showMessage("Server Error")
+            c.addUser(etRoomNumber.text.toString().toInt()) {
+                c.updateRoomState(etRoomNumber.text.toString().toInt()){
+                    val intent = Intent(this, RoomActivity::class.java)
+                    startActivity(intent)
+                }
             }
-            finally {
-                val intent = Intent(this, RoomActivity::class.java)
-                startActivity(intent)
-            }
+
         } else
             showMessage("Введите номер комнаты")
-
     }
+
 
     @OnClick(R.id.btCreateRoom)
     fun clickBtCreateRoom(){
-        try {
-            room = requests.createRoom() as Room
-        }catch (e: Exception){
-            showMessage("Server Error")
+        c.createRoom {
+            c.addUser(room.roomid){
+                c.activeUser {
+                    val intent = Intent(this, RoomActivity::class.java)
+                    startActivity(intent)
+                }
+            }
         }
-        finally {
-            val intent = Intent(this, RoomActivity::class.java)
-            startActivity(intent)
-        }
+
+        // сначала нужно получить комнату
+        //val intent = Intent(this, RoomActivity::class.java)
+        //startActivity(intent)
     }
 
     private fun showMessage(text: String) {
