@@ -3,6 +3,7 @@ package com.example.alias_client
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
@@ -14,6 +15,7 @@ import com.example.alias_client.data.User
 import com.example.alias_client.net.Converter
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.HttpException
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         var room = Room()
         var user = User()
         var word = ""
+        var winner = User()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,33 +38,41 @@ class MainActivity : AppCompatActivity() {
 
     @OnClick(R.id.btConnect)
     fun clickBtConnect(){
-        if (etRoomNumber.text.toString() != ""){
-            c.addUser(etRoomNumber.text.toString().toInt()) {
-                c.updateRoomState(etRoomNumber.text.toString().toInt()){
-                    val intent = Intent(this, RoomActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-
-        } else
+        if (etRoomNumber.visibility == View.GONE){
+            etRoomNumber.visibility = View.VISIBLE
             showMessage("Введите номер комнаты")
+        }else {
+            if (etName.text.toString() != "") {
+                if (etRoomNumber.text.toString() == "") {
+                    showMessage("Введите номер комнаты")
+                } else
+                    c.addUser(etRoomNumber.text.toString().toInt()) {
+                        c.updateRoomState(etRoomNumber.text.toString().toInt()) {
+                            user.username = etName.text.toString()
+                            val intent = Intent(this, RoomActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+            } else
+                showMessage("Введите имя")
+        }
     }
 
 
     @OnClick(R.id.btCreateRoom)
     fun clickBtCreateRoom(){
-        c.createRoom {
-            c.addUser(room.roomid){
-                c.activeUser {
-                    val intent = Intent(this, RoomActivity::class.java)
-                    startActivity(intent)
+        if (etName.text.toString() != ""){
+            c.createRoom {
+                c.addUser(room.roomid){
+                    c.activeUser {
+                        user.username = etName.text.toString()
+                        val intent = Intent(this, RoomActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
-        }
-
-        // сначала нужно получить комнату
-        //val intent = Intent(this, RoomActivity::class.java)
-        //startActivity(intent)
+        } else
+            showMessage("Введите имя")
     }
 
     private fun showMessage(text: String) {

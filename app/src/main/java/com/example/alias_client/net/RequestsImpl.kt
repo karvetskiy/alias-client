@@ -1,6 +1,7 @@
 package com.example.alias_client.net
 
 import com.example.alias_client.data.Room
+import com.example.alias_client.data.User
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -62,4 +63,9 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
+    override fun winner(roomid: Int): Observable<User> =
+        getBnc()
+            .winner(roomid)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
 }

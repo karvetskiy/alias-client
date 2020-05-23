@@ -13,6 +13,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.example.alias_client.MainActivity.Companion.room
 import com.example.alias_client.MainActivity.Companion.user
+import com.example.alias_client.MainActivity.Companion.winner
 import com.example.alias_client.MainActivity.Companion.word
 import com.example.alias_client.data.Room
 import com.example.alias_client.data.User
@@ -29,15 +30,16 @@ class RoomActivity : AppCompatActivity() {
     private val handler = Handler()
 
 
-    val timer = object: CountDownTimer(60000, 1000) {
+    private val timer = object: CountDownTimer(60000, 1000) {
         override fun onTick(ms: Long) {
             tvTimer.text = (ms/1000).toString()
         }
         override fun onFinish() {
             tvTimer.text = ""
-            tvWord.text = "Time's up"
+            tvWord.text = "Score: ${user.score}"
             btNo.visibility = View.INVISIBLE
             btYes.visibility = View.INVISIBLE
+            btStart.visibility = View.VISIBLE
             c.update {
                 c.nextUser {
                     c.updateRoomState(room.roomid){}
@@ -50,30 +52,32 @@ class RoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
         ButterKnife.bind(this)
-        tvRoom.text = room.roomid.toString()
-        tvInfo.text = "Send room ID to your friends\nUser #${user.userid}"
         toCheckRoomState()
+        tvRoom.text = room.roomid.toString()
+        tvInfo.text = "Send room ID to your friends\nUser ${user.username}"
     }
 
     private fun toCheckRoomState() {
         val runnable = Runnable {
-            c.updateRoomState(room.roomid) {}
+            c.update {
+                c.updateRoomState(room.roomid) {}
+            }
+
             toCheckRoomState()
         }
-        handler.postDelayed(runnable, 10000)
+        handler.postDelayed(runnable, 2000)
     }
 
     @OnClick(R.id.btStart)
     fun clickBtStart(){
         if (room.activeUserID == user.userid){
             c.getWord {
-                Log.i("word", word)
                 tvWord.text = word
                 timer.start()
                 btYes.visibility = View.VISIBLE
                 btNo.visibility = View.VISIBLE
+                btStart.visibility = View.INVISIBLE
             }
-            Log.i("word", word)
 
 
         } else{
@@ -99,6 +103,7 @@ class RoomActivity : AppCompatActivity() {
             tvWord.text = word
         }
         user.score += 1
+
     }
 
     @OnClick(R.id.btNo)
@@ -109,6 +114,13 @@ class RoomActivity : AppCompatActivity() {
         user.score -= 2
         if (user.score < 0){
             user.score = 0
+        }
+    }
+
+    @OnClick(R.id.btEnd)
+    fun clickBtEnd(){
+        c.getWinner {
+            tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
         }
     }
 

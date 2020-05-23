@@ -1,6 +1,7 @@
 package com.example.alias_client.net
 
 import com.example.alias_client.data.Room
+import com.example.alias_client.data.User
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 
@@ -14,5 +15,6 @@ interface RequestsI {
     fun getWord():Observable<String>
     fun nextUser(roomid: Int, userid: Int):Observable<ResponseBody>
     fun update(roomid: Int, userid: Int, score: Int):Observable<ResponseBody>
+    fun winner(roomid: Int):Observable<User>
 
 }

@@ -1,6 +1,7 @@
 package com.example.alias_client.net
 
 import com.example.alias_client.data.Room
+import com.example.alias_client.data.User
 import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.GET
@@ -31,5 +32,8 @@ interface Requests {
 
     @GET("updateOnServer")
     fun update(@Query("roomid")roomid: Int, @Query("userid")userid: Int, @Query("score")score: Int):Observable<ResponseBody>
+
+    @GET("winner")
+    fun winner(@Query("roomid")roomid: Int):Observable<User>
 
 }

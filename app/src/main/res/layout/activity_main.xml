@@ -8,18 +8,32 @@
     tools:context=".MainActivity" >
 
     <EditText
+        android:id="@+id/etName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="enter your name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/etRoomNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
         android:id="@+id/etRoomNumber"
         style="@android:style/Widget.Material.Light.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
         android:ems="10"
         android:hint="@string/room_number_hint"
         android:inputType="number"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btConnect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btConnect"
@@ -27,9 +41,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Connect to room"
+        app:layout_constraintBottom_toTopOf="@+id/btCreateRoom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etRoomNumber" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btCreateRoom"

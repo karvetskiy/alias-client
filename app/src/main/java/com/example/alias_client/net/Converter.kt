@@ -1,7 +1,10 @@
 package com.example.alias_client.net
 
+import android.widget.Toast
 import com.example.alias_client.MainActivity
+import com.example.alias_client.MainActivity.Companion.winner
 import com.example.alias_client.MainActivity.Companion.word
+import com.example.alias_client.RoomActivity
 
 class Converter {
 
@@ -86,6 +89,17 @@ class Converter {
             .subscribe({
                 onDeletedUser.invoke()
             }, {it.printStackTrace()})
+    }
+
+    fun getWinner(onGetWinner:() -> Unit){
+        requests
+            .winner(MainActivity.room.roomid)
+            .subscribe({
+                winner = it
+                onGetWinner.invoke()
+            }, {
+                it.printStackTrace()
+            })
     }
 
 }
