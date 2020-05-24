@@ -13,7 +13,7 @@ interface RequestsI {
     fun activeUser(roomid: Int, userid: Int):Observable<Room>
     fun getRoomState(roomid: Int):Observable<Room>
     fun getWord():Observable<String>
-    fun nextUser(roomid: Int, userid: Int):Observable<ResponseBody>
+    fun nextUser(roomid: Int):Observable<ResponseBody>
     fun update(roomid: Int, userid: Int, score: Int, username: String):Observable<ResponseBody>
     fun winner(roomid: Int):Observable<Int>
     fun start(roomid: Int):Observable<ResponseBody>

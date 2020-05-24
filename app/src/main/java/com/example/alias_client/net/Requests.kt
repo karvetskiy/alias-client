@@ -28,7 +28,7 @@ interface Requests {
     fun getWord():Observable<String>
 
     @GET("nextUser")
-    fun nextUser(@Query("roomid")roomid: Int, @Query("userid")userid: Int):Observable<ResponseBody>
+    fun nextUser(@Query("roomid")roomid: Int):Observable<ResponseBody>
 
     @GET("updateOnServer")
     fun update(@Query("roomid")roomid: Int, @Query("userid")userid: Int, @Query("score")score: Int, @Query("username")username: String):Observable<ResponseBody>

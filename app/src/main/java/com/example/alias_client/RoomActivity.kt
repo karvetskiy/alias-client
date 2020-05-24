@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -61,7 +62,6 @@ class RoomActivity : AppCompatActivity() {
     private fun toCheckRoomState() {
         var activeUser: User
         val runnable = Runnable {
-            c.update {
                 c.updateRoomState(room.roomid) {
                     if (room.isEnded)
                         tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
@@ -86,7 +86,6 @@ class RoomActivity : AppCompatActivity() {
                     if (room.isStarted && user.userid == room.activeUserID)
                         btEnd.visibility = View.VISIBLE
                 }
-            }
 
             toCheckRoomState()
         }
@@ -159,16 +158,18 @@ class RoomActivity : AppCompatActivity() {
             winner = room.users.find { it.userid == winnerid }!!
             if (winner.score != 0) {
                 c.end {
-                    timer.cancel()
-                    timer.onFinish()
-                    tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+                    Log.i("user1", user.score.toString())
+                    c.updateRoomState(room.roomid){
+                        Log.i("user2", user.score.toString())
+                        timer.cancel()
+                        timer.onFinish()
+                        tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+                        tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+                    }
+
                 }
             } else {
                 showMessage("Начните игру")
-            }
-            c.updateRoomState(room.roomid) {
-                tvInfo.text =
-                    "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
             }
         }
     }
@@ -178,7 +179,10 @@ class RoomActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (back_pressed + 2000 > System.currentTimeMillis()){
             super.onBackPressed()
-            c.deleteUser {  }
+            c.deleteUser {
+                room = Room()
+                user = User()
+            }
         }
         else Toast.makeText(this, "Нажмите еще раз для выхода", Toast.LENGTH_SHORT).show()
         back_pressed = System.currentTimeMillis()

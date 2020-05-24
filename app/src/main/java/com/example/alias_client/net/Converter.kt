@@ -25,6 +25,7 @@ class Converter {
             .getRoomState(roomid)
             .subscribe({
                 room = it
+                room.users.find { it.userid == user.userid }?.let { user = it }
                 onUpdatedRoom.invoke()
             }, {
                 it.printStackTrace()
@@ -68,7 +69,7 @@ class Converter {
 
     fun nextUser(onUserChanged:() -> Unit){
         requests
-            .nextUser(room.roomid, user.userid)
+            .nextUser(room.roomid)
             .subscribe({
                 onUserChanged.invoke()
             }, {it.printStackTrace()})

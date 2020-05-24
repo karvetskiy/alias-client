@@ -51,9 +51,9 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
-    override fun nextUser(roomid: Int, userid: Int): Observable<ResponseBody> =
+    override fun nextUser(roomid: Int): Observable<ResponseBody> =
         getBnc()
-            .nextUser(roomid, userid)
+            .nextUser(roomid)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
