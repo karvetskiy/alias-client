@@ -14,7 +14,7 @@ interface RequestsI {
     fun getRoomState(roomid: Int):Observable<Room>
     fun getWord():Observable<String>
     fun nextUser(roomid: Int, userid: Int):Observable<ResponseBody>
-    fun update(roomid: Int, userid: Int, score: Int):Observable<ResponseBody>
-    fun winner(roomid: Int):Observable<User>
+    fun update(roomid: Int, userid: Int, score: Int, username: String):Observable<ResponseBody>
+    fun winner(roomid: Int):Observable<Int>
 
 }

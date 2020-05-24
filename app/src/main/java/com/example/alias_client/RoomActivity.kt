@@ -1,27 +1,23 @@
 package com.example.alias_client
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.example.alias_client.MainActivity.Companion.room
 import com.example.alias_client.MainActivity.Companion.user
-import com.example.alias_client.MainActivity.Companion.winner
+import com.example.alias_client.MainActivity.Companion.winnerid
 import com.example.alias_client.MainActivity.Companion.word
 import com.example.alias_client.data.Room
 import com.example.alias_client.data.User
 import com.example.alias_client.net.Converter
-import com.example.alias_client.net.RequestsI
-import com.example.alias_client.net.RequestsImpl
 import kotlinx.android.synthetic.main.activity_room.*
-import kotlin.time.measureTimedValue
+
 
 class RoomActivity : AppCompatActivity() {
 
@@ -36,14 +32,15 @@ class RoomActivity : AppCompatActivity() {
         }
         override fun onFinish() {
             tvTimer.text = ""
-            tvWord.text = "Score: ${user.score}"
+            tvWord.text = ""
             btNo.visibility = View.INVISIBLE
             btYes.visibility = View.INVISIBLE
             btStart.visibility = View.VISIBLE
             c.update {
                 c.nextUser {
                     c.updateRoomState(room.roomid){}
-            }}
+                }
+            }
 
         }
     }
@@ -52,9 +49,12 @@ class RoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
         ButterKnife.bind(this)
-        toCheckRoomState()
+        c.update {
+            toCheckRoomState()
+        }
+
         tvRoom.text = room.roomid.toString()
-        tvInfo.text = "Send room ID to your friends\nUser ${user.username}"
+        tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
     }
 
     private fun toCheckRoomState() {
@@ -104,6 +104,10 @@ class RoomActivity : AppCompatActivity() {
         }
         user.score += 1
 
+        c.update {
+            tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+        }
+
     }
 
     @OnClick(R.id.btNo)
@@ -115,13 +119,39 @@ class RoomActivity : AppCompatActivity() {
         if (user.score < 0){
             user.score = 0
         }
+        c.update {
+            tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+        }
     }
 
     @OnClick(R.id.btEnd)
     fun clickBtEnd(){
-        c.getWinner {
-            tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+        if (user.userid == room.activeUserID) {
+            c.getWinner {
+                val winner = room.users.find { it.userid == winnerid }!!
+                if (winner.score != 0) {
+                    timer.cancel()
+                    timer.onFinish()
+                    tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+                } else {
+                    showMessage("Начните игру")
+                }
+
+                c.updateRoomState(room.roomid) {tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"}
+            }
+        } else
+            showMessage("Вы не можете закончить игру")
+    }
+
+    private var back_pressed: Long = 0
+
+    override fun onBackPressed() {
+        if (back_pressed + 2000 > System.currentTimeMillis()){
+            super.onBackPressed()
+            c.deleteUser {  }
         }
+        else Toast.makeText(this, "Нажмите еще раз для выхода", Toast.LENGTH_SHORT).show()
+        back_pressed = System.currentTimeMillis()
     }
 
     private fun showMessage(text: String) {

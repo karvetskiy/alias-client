@@ -1,10 +1,9 @@
 package com.example.alias_client.net
 
-import android.widget.Toast
-import com.example.alias_client.MainActivity
-import com.example.alias_client.MainActivity.Companion.winner
+import com.example.alias_client.MainActivity.Companion.room
+import com.example.alias_client.MainActivity.Companion.user
+import com.example.alias_client.MainActivity.Companion.winnerid
 import com.example.alias_client.MainActivity.Companion.word
-import com.example.alias_client.RoomActivity
 
 class Converter {
 
@@ -21,11 +20,11 @@ class Converter {
             })
     }
 
-    fun updateRoomState(roomId: Int, onUpdatedRoom:() -> Unit){
+    fun updateRoomState(roomid: Int, onUpdatedRoom:() -> Unit){
         requests
-            .getRoomState(roomId)
+            .getRoomState(roomid)
             .subscribe({
-                MainActivity.room = it
+                room = it
                 onUpdatedRoom.invoke()
             }, {
                 it.printStackTrace()
@@ -37,7 +36,7 @@ class Converter {
         requests
             .addUser(roomid)
             .subscribe({
-                MainActivity.user.userid = it
+                user.userid = it
                 onAddedUser.invoke()
             }, {
                 it.printStackTrace()
@@ -46,9 +45,9 @@ class Converter {
 
     fun activeUser(onCreatedRoom: () -> Unit){
         requests
-            .activeUser(MainActivity.room.roomid, MainActivity.user.userid)
+            .activeUser(room.roomid, user.userid)
             .subscribe({
-                MainActivity.room = it
+                room = it
                 onCreatedRoom.invoke()
             }, {
                 it.printStackTrace()
@@ -59,7 +58,7 @@ class Converter {
         requests
             .createRoom()
             .subscribe({
-                MainActivity.room = it
+                room = it
                 onCreatedRoom.invoke()
             }, {
                 it.printStackTrace()
@@ -69,7 +68,7 @@ class Converter {
 
     fun nextUser(onUserChanged:() -> Unit){
         requests
-            .nextUser(MainActivity.room.roomid, MainActivity.user.userid)
+            .nextUser(room.roomid, user.userid)
             .subscribe({
                 onUserChanged.invoke()
             }, {it.printStackTrace()})
@@ -77,7 +76,7 @@ class Converter {
 
     fun update(onUpdated:() -> Unit){
         requests
-            .update(MainActivity.room.roomid, MainActivity.user.userid, MainActivity.user.score)
+            .update(room.roomid, user.userid, user.score, user.username)
             .subscribe({
                 onUpdated.invoke()
             },{it.printStackTrace()})
@@ -85,7 +84,7 @@ class Converter {
 
     fun deleteUser(onDeletedUser:() -> Unit){
         requests
-            .deleteUser(MainActivity.room.roomid, MainActivity.user.userid)
+            .deleteUser(room.roomid, user.userid)
             .subscribe({
                 onDeletedUser.invoke()
             }, {it.printStackTrace()})
@@ -93,9 +92,9 @@ class Converter {
 
     fun getWinner(onGetWinner:() -> Unit){
         requests
-            .winner(MainActivity.room.roomid)
+            .winner(room.roomid)
             .subscribe({
-                winner = it
+                winnerid = it
                 onGetWinner.invoke()
             }, {
                 it.printStackTrace()

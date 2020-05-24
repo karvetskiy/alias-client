@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         var room = Room()
         var user = User()
         var word = ""
-        var winner = User()
+        var winnerid = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,8 +49,11 @@ class MainActivity : AppCompatActivity() {
                     c.addUser(etRoomNumber.text.toString().toInt()) {
                         c.updateRoomState(etRoomNumber.text.toString().toInt()) {
                             user.username = etName.text.toString()
-                            val intent = Intent(this, RoomActivity::class.java)
-                            startActivity(intent)
+                            c.update {
+                                val intent = Intent(this, RoomActivity::class.java)
+                                startActivity(intent)
+                            }
+
                         }
                     }
             } else
@@ -66,8 +69,10 @@ class MainActivity : AppCompatActivity() {
                 c.addUser(room.roomid){
                     c.activeUser {
                         user.username = etName.text.toString()
-                        val intent = Intent(this, RoomActivity::class.java)
-                        startActivity(intent)
+                        c.update {
+                            val intent = Intent(this, RoomActivity::class.java)
+                            startActivity(intent)
+                        }
                     }
                 }
             }

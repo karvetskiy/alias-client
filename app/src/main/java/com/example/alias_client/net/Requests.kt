@@ -31,9 +31,9 @@ interface Requests {
     fun nextUser(@Query("roomid")roomid: Int, @Query("userid")userid: Int):Observable<ResponseBody>
 
     @GET("updateOnServer")
-    fun update(@Query("roomid")roomid: Int, @Query("userid")userid: Int, @Query("score")score: Int):Observable<ResponseBody>
+    fun update(@Query("roomid")roomid: Int, @Query("userid")userid: Int, @Query("score")score: Int, @Query("username")username: String):Observable<ResponseBody>
 
     @GET("winner")
-    fun winner(@Query("roomid")roomid: Int):Observable<User>
+    fun winner(@Query("roomid")roomid: Int):Observable<Int>
 
 }
