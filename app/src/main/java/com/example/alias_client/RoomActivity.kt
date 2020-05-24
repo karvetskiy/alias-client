@@ -11,6 +11,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.example.alias_client.MainActivity.Companion.room
 import com.example.alias_client.MainActivity.Companion.user
+import com.example.alias_client.MainActivity.Companion.winner
 import com.example.alias_client.MainActivity.Companion.winnerid
 import com.example.alias_client.MainActivity.Companion.word
 import com.example.alias_client.data.Room
@@ -58,9 +59,33 @@ class RoomActivity : AppCompatActivity() {
     }
 
     private fun toCheckRoomState() {
+        var activeUser: User
         val runnable = Runnable {
             c.update {
-                c.updateRoomState(room.roomid) {}
+                c.updateRoomState(room.roomid) {
+                    if (room.isEnded)
+                        tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+                        btEnd.visibility = View.INVISIBLE
+                    if (room.isStarted && user.userid != room.activeUserID) {
+                        activeUser = room.users.find { it.userid == room.activeUserID }!!
+                        tvWord.text = "Играет ${activeUser.username}"
+                        btEnd.visibility = View.INVISIBLE
+                    }
+                    if (!room.isStarted && !room.isEnded){
+                        if (user.userid == room.activeUserID) {
+                            tvWord.text = "Ждем вашего хода"
+                            btEnd.visibility = View.VISIBLE
+                        }
+                        else{
+                            activeUser = room.users.find { it.userid == room.activeUserID }!!
+                            tvWord.text = "Ждем хода ${activeUser.username}"
+                            btEnd.visibility = View.INVISIBLE
+                        }
+                    }
+
+                    if (room.isStarted && user.userid == room.activeUserID)
+                        btEnd.visibility = View.VISIBLE
+                }
             }
 
             toCheckRoomState()
@@ -71,12 +96,14 @@ class RoomActivity : AppCompatActivity() {
     @OnClick(R.id.btStart)
     fun clickBtStart(){
         if (room.activeUserID == user.userid){
-            c.getWord {
-                tvWord.text = word
-                timer.start()
-                btYes.visibility = View.VISIBLE
-                btNo.visibility = View.VISIBLE
-                btStart.visibility = View.INVISIBLE
+            c.start {
+                c.getWord {
+                    tvWord.text = word
+                    timer.start()
+                    btYes.visibility = View.VISIBLE
+                    btNo.visibility = View.VISIBLE
+                    btStart.visibility = View.INVISIBLE
+                }
             }
 
 
@@ -89,9 +116,11 @@ class RoomActivity : AppCompatActivity() {
     fun clickBtLeaveRoom(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        c.deleteUser {
-            room = Room()
-            user = User()
+        c.nextUser {
+            c.deleteUser {
+                room = Room()
+                user = User()
+            }
         }
 
 
@@ -126,21 +155,22 @@ class RoomActivity : AppCompatActivity() {
 
     @OnClick(R.id.btEnd)
     fun clickBtEnd(){
-        if (user.userid == room.activeUserID) {
-            c.getWinner {
-                val winner = room.users.find { it.userid == winnerid }!!
-                if (winner.score != 0) {
+        c.getWinner {
+            winner = room.users.find { it.userid == winnerid }!!
+            if (winner.score != 0) {
+                c.end {
                     timer.cancel()
                     timer.onFinish()
                     tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
-                } else {
-                    showMessage("Начните игру")
                 }
-
-                c.updateRoomState(room.roomid) {tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"}
+            } else {
+                showMessage("Начните игру")
             }
-        } else
-            showMessage("Вы не можете закончить игру")
+            c.updateRoomState(room.roomid) {
+                tvInfo.text =
+                    "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+            }
+        }
     }
 
     private var back_pressed: Long = 0

@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         var user = User()
         var word = ""
         var winnerid = 0
+        var winner = User()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

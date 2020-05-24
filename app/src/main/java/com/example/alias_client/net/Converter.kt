@@ -101,4 +101,20 @@ class Converter {
             })
     }
 
+    fun start(onStarted:() -> Unit){
+        requests
+            .start(room.roomid)
+            .subscribe({
+                onStarted.invoke()
+            }, {it.printStackTrace()})
+    }
+
+    fun end(onEnded:() -> Unit){
+        requests
+            .end(room.roomid)
+            .subscribe({
+                onEnded.invoke()
+            }, {it.printStackTrace()})
+    }
+
 }

@@ -36,4 +36,10 @@ interface Requests {
     @GET("winner")
     fun winner(@Query("roomid")roomid: Int):Observable<Int>
 
+    @GET("start")
+    fun start(@Query("roomid")roomid: Int):Observable<ResponseBody>
+
+    @GET("end")
+    fun end(@Query("roomid")roomid: Int):Observable<ResponseBody>
+
 }

@@ -16,5 +16,7 @@ interface RequestsI {
     fun nextUser(roomid: Int, userid: Int):Observable<ResponseBody>
     fun update(roomid: Int, userid: Int, score: Int, username: String):Observable<ResponseBody>
     fun winner(roomid: Int):Observable<Int>
+    fun start(roomid: Int):Observable<ResponseBody>
+    fun end(roomid: Int):Observable<ResponseBody>
 
 }

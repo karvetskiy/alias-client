@@ -68,4 +68,18 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .winner(roomid)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+
+    override fun start(roomid: Int): Observable<ResponseBody> =
+        getBnc()
+            .start(roomid)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+
+    override fun end(roomid: Int): Observable<ResponseBody> =
+        getBnc()
+            .end(roomid)
+            .subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
+
+
 }
