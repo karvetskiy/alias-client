@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -158,9 +157,7 @@ class RoomActivity : AppCompatActivity() {
             winner = room.users.find { it.userid == winnerid }!!
             if (winner.score != 0) {
                 c.end {
-                    Log.i("user1", user.score.toString())
                     c.updateRoomState(room.roomid){
-                        Log.i("user2", user.score.toString())
                         timer.cancel()
                         timer.onFinish()
                         tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
