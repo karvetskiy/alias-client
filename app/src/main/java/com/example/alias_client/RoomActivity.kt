@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import butterknife.ButterKnife
@@ -50,6 +51,7 @@ class RoomActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_room)
         ButterKnife.bind(this)
+        pbRoom.visibility = ProgressBar.VISIBLE
         c.update {
             toCheckRoomState()
         }
@@ -62,6 +64,7 @@ class RoomActivity : AppCompatActivity() {
         var activeUser: User
         val runnable = Runnable {
                 c.updateRoomState(room.roomid) {
+                    pbRoom.visibility = ProgressBar.INVISIBLE
                     if (room.isEnded)
                         tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
                         btEnd.visibility = View.INVISIBLE
