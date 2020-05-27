@@ -132,32 +132,31 @@ class RoomActivity : AppCompatActivity() {
     @OnClick(R.id.btYes)
     fun clickBtYes(){
         pbRoom.visibility = ProgressBar.VISIBLE
-        c.getWord {
-            tvWord.text = word
-        }
         user.score += 1
-
         c.update {
-            tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+            c.getWord {
+                tvWord.text = word
+                pbRoom.visibility = ProgressBar.INVISIBLE
+                tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+            }
         }
-        pbRoom.visibility = ProgressBar.INVISIBLE
 
     }
 
     @OnClick(R.id.btNo)
     fun clickBtNo(){
         pbRoom.visibility = ProgressBar.VISIBLE
-        c.getWord {
-            tvWord.text = word
-        }
         user.score -= 2
         if (user.score < 0){
             user.score = 0
         }
         c.update {
-            tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+            c.getWord {
+                tvWord.text = word
+                pbRoom.visibility = ProgressBar.INVISIBLE
+                tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
+            }
         }
-        pbRoom.visibility = ProgressBar.INVISIBLE
     }
 
     @OnClick(R.id.btEnd)
