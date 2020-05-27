@@ -66,7 +66,7 @@ class RoomActivity : AppCompatActivity() {
                 c.updateRoomState(room.roomid) {
                     pbRoom.visibility = ProgressBar.INVISIBLE
                     if (room.isEnded)
-                        tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+                        tvWord.text = "${winner.username} победил\nCчет: ${winner.score}"
                         btEnd.visibility = View.INVISIBLE
                     if (room.isStarted && user.userid != room.activeUserID) {
                         activeUser = room.users.find { it.userid == room.activeUserID }!!
@@ -97,8 +97,10 @@ class RoomActivity : AppCompatActivity() {
     @OnClick(R.id.btStart)
     fun clickBtStart(){
         if (room.activeUserID == user.userid){
+            pbRoom.visibility = ProgressBar.VISIBLE
             c.start {
                 c.getWord {
+                    pbRoom.visibility = ProgressBar.INVISIBLE
                     tvWord.text = word
                     timer.start()
                     btYes.visibility = View.VISIBLE
@@ -129,6 +131,7 @@ class RoomActivity : AppCompatActivity() {
 
     @OnClick(R.id.btYes)
     fun clickBtYes(){
+        pbRoom.visibility = ProgressBar.VISIBLE
         c.getWord {
             tvWord.text = word
         }
@@ -137,11 +140,13 @@ class RoomActivity : AppCompatActivity() {
         c.update {
             tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
         }
+        pbRoom.visibility = ProgressBar.INVISIBLE
 
     }
 
     @OnClick(R.id.btNo)
     fun clickBtNo(){
+        pbRoom.visibility = ProgressBar.VISIBLE
         c.getWord {
             tvWord.text = word
         }
@@ -152,23 +157,27 @@ class RoomActivity : AppCompatActivity() {
         c.update {
             tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
         }
+        pbRoom.visibility = ProgressBar.INVISIBLE
     }
 
     @OnClick(R.id.btEnd)
     fun clickBtEnd(){
+        pbRoom.visibility = ProgressBar.VISIBLE
         c.getWinner {
             winner = room.users.find { it.userid == winnerid }!!
             if (winner.score != 0) {
                 c.end {
                     c.updateRoomState(room.roomid){
+                        pbRoom.visibility = ProgressBar.INVISIBLE
                         timer.cancel()
                         timer.onFinish()
-                        tvWord.text = "${winner.username} победил\nсчет: ${winner.score}"
+                        tvWord.text = "${winner.username} победил\nCчет: ${winner.score}"
                         tvInfo.text = "Отправьте ID комнаты друзьям\nИгрок ${user.username}; Счет: ${user.score}"
                     }
 
                 }
             } else {
+                pbRoom.visibility = ProgressBar.INVISIBLE
                 showMessage("Начните игру")
             }
         }
