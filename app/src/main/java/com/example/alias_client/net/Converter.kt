@@ -4,6 +4,7 @@ import com.example.alias_client.MainActivity.Companion.room
 import com.example.alias_client.MainActivity.Companion.user
 import com.example.alias_client.MainActivity.Companion.winnerid
 import com.example.alias_client.MainActivity.Companion.word
+import com.example.alias_client.data.RequestBody
 
 class Converter {
 
@@ -68,24 +69,27 @@ class Converter {
 
 
     fun nextUser(onUserChanged:() -> Unit){
+        val body = RequestBody(room.roomid)
         requests
-            .nextUser(room.roomid)
+            .nextUser(body)
             .subscribe({
                 onUserChanged.invoke()
             }, {it.printStackTrace()})
     }
 
     fun update(onUpdated:() -> Unit){
+        val body = RequestBody(room.roomid, user.userid, user.score, user.username)
         requests
-            .update(room.roomid, user.userid, user.score, user.username)
+            .update(body)
             .subscribe({
                 onUpdated.invoke()
             },{it.printStackTrace()})
     }
 
     fun deleteUser(onDeletedUser:() -> Unit){
+        val body = RequestBody(room.roomid, user.userid)
         requests
-            .deleteUser(room.roomid, user.userid)
+            .deleteUser(body)
             .subscribe({
                 onDeletedUser.invoke()
             }, {it.printStackTrace()})
@@ -103,16 +107,18 @@ class Converter {
     }
 
     fun start(onStarted:() -> Unit){
+        val body = RequestBody(room.roomid)
         requests
-            .start(room.roomid)
+            .start(body)
             .subscribe({
                 onStarted.invoke()
             }, {it.printStackTrace()})
     }
 
     fun end(onEnded:() -> Unit){
+        val body = RequestBody(room.roomid)
         requests
-            .end(room.roomid)
+            .end(body)
             .subscribe({
                 onEnded.invoke()
             }, {it.printStackTrace()})

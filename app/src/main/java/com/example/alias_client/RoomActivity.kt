@@ -164,7 +164,7 @@ class RoomActivity : AppCompatActivity() {
         pbRoom.visibility = ProgressBar.VISIBLE
         c.getWinner {
             winner = room.users.find { it.userid == winnerid }!!
-            if (winner.score != 0) {
+            if (room.isStarted) {
                 c.end {
                     c.updateRoomState(room.roomid){
                         pbRoom.visibility = ProgressBar.INVISIBLE

@@ -1,5 +1,6 @@
 package com.example.alias_client.net
 
+import com.example.alias_client.data.RequestBody
 import com.example.alias_client.data.Room
 import com.example.alias_client.data.User
 import io.reactivex.Observable
@@ -24,9 +25,9 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .observeOn(AndroidSchedulers.mainThread())
 
 
-    override fun deleteUser(roomid: Int, userid: Int): Observable<ResponseBody> =
+    override fun deleteUser(body: RequestBody): Observable<ResponseBody> =
         getBnc()
-            .deleteUser(roomid, userid)
+            .deleteUser(body)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -51,15 +52,15 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
-    override fun nextUser(roomid: Int): Observable<ResponseBody> =
+    override fun nextUser(body: RequestBody): Observable<ResponseBody> =
         getBnc()
-            .nextUser(roomid)
+            .nextUser(body)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
-    override fun update(roomid: Int, userid: Int, score: Int, username: String): Observable<ResponseBody> =
+    override fun update(body: RequestBody): Observable<ResponseBody> =
         getBnc()
-            .update(roomid, userid, score, username)
+            .update(body)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
@@ -69,15 +70,15 @@ class RequestsImpl(): BaseRequest(), RequestsI {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
-    override fun start(roomid: Int): Observable<ResponseBody> =
+    override fun start(body: RequestBody): Observable<ResponseBody> =
         getBnc()
-            .start(roomid)
+            .start(body)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
-    override fun end(roomid: Int): Observable<ResponseBody> =
+    override fun end(body: RequestBody): Observable<ResponseBody> =
         getBnc()
-            .end(roomid)
+            .end(body)
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 
